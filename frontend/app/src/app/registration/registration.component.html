@@ -1,0 +1,156 @@
+<section class="hero is-mile-1 is-fullheight">
+    <!-- Hero head: will stick at the top -->
+   
+  
+    <!-- Hero content: will be in the middle -->
+    <div class="hero-body" id='hero-telo'>
+       <div class="container is-hidden">
+        <div class="columns">
+            <div class="column is-offset-3 is-6">
+                <form [formGroup]='form_registracija'>
+                    <div class="field">
+                        <div class="control">
+                            <input class='input' type='text' placeholder="Korisničko ime" formControlName='korime'>
+                        </div>
+                    </div>
+ 
+                    <div class="field">
+                        <div class="control">
+                            <input class='input' type='password' placeholder="Lozinka" formControlName='lozinka'>
+                        </div>
+                    </div>
+ 
+                    <div class="field">
+                        <div class="control">
+                            <input class='input' type='password' placeholder="Potvrda lozinke" formControlName='potvrda_loz'>
+                        </div>
+                    </div>
+ 
+                    <div class="field">
+                        <div class="control">
+                            <input class='input' type='text' placeholder="Ime" formControlName='ime'>
+                        </div>
+                    </div>
+ 
+                    <div class="field">
+                        <div class="control">
+                            <input class='input' type='text' placeholder="Prezime" formControlName='prezime'>
+                        </div>
+                    </div>
+ 
+                    <div class="field">
+                     <div class="control">
+                         <div class="select is-fullwidth">
+                             <select formControlName='zemlja'>
+                                 <option>Izaberite nacionalnost</option>
+                                 <option>Srbija</option>
+                                 <option value='Nemacka'>Nemačka</option>
+                                 <option>Engleska</option>
+                                 <option>SAD</option>
+                                 <option>Slovenija</option>
+                                 <option value='Spanija'>Španija</option>
+                                 <option value='Grcka'>Grčka</option>
+                                 <option>Argentina</option>
+                                 <option>Francuska</option>
+                                 <option>Italija</option>
+                                 <option value='Svajcarska'>Švajcarska</option>
+                             </select>
+                         </div>
+                     </div>
+                 </div>
+ 
+                    <div class="field">
+                        <div class="control">
+                            <input class='input' type='text' placeholder="Adresa elektronske pošte" formControlName='mail'>
+                        </div>
+                    </div>
+ 
+                    <div class="field">
+                        <div class="control">
+                            <div class="select is-fullwidth">
+                                <select formControlName='tip'>
+                                    <option>Tip korisnika</option>
+                                    <option ngValue='vodja'>Vođa nacionalne delegacije</option>
+                                    <option ngValue='delegat'>Delegat</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="field">
+                        <div class="control">
+                            <button class="button" type='submit' (click)='ngRegister()'>Registracija</button>
+                        </div>
+                    </div>
+ 
+                    <div *ngIf='err_msg' class="field">
+                        <div class="control">
+                            {{err_msg}}
+                        </div>
+                    </div>
+ 
+ 
+                </form>
+            </div>
+        </div>
+       </div>
+
+
+       <div class="container">
+           <div class="columns">
+               <div class="column is-8 is-offset-2">
+                <form [formGroup]='form_login'>
+                    
+                    <div class="field">
+                        <div class="control">
+                            <input class='input' type='text' placeholder="Korisničko ime" formControlName='korime'>
+                        </div>
+                    </div>
+ 
+                    <div class="field">
+                        <div class="control">
+                            <input class='input' type='password' placeholder="Lozinka" formControlName='lozinka'>
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <div class="select is-fullwidth">
+                                <select formControlName='tip'>
+                                    <option>Tip korisnika</option>
+                                    <option ngValue='vodja'>Vođa nacionalne delegacije</option>
+                                    <option ngValue='delegat'>Delegat</option>
+                                    <option ngValue='organizator'>Organizator</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="field">
+                        <div class="control">
+                            <button class="button" type='submit' (click)='ngLogin()'>Prijava</button>
+                        </div>
+                    </div>
+
+
+                </form>
+
+               </div>
+           </div>
+       </div>
+       
+  
+  
+    </div>
+  
+    <div class="hero-foot" id='hero-futer'>
+        <nav class="tabs is-boxed is-fullwidth ">
+            <div class="container">
+                <ul>
+                    
+                </ul>
+            </div>
+        </nav>
+    </div>
+  
+  </section>

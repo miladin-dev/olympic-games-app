@@ -1,0 +1,332 @@
+<section class='hero has-background-info-light is-fullheight'>
+
+    <div class='hero-head'>
+        <div class="container">
+          <nav class='navbar'>
+              <div class='navbar-brand'>
+                  <a class='navbar-item'>
+                      <img src='../../assets/oilogo2.png'>
+                  </a>
+              </div>
+      
+              <div class="navbar-end">
+                  <a class="navbar-item is-active" (click)='show_content(0)'>
+                    Početna stranica
+                  </a>
+                  <div class="navbar-item">
+                    <div class="buttons">
+                      <a class="button is-info" (click)='odjaviSe()'>
+                        <strong>Odjava</strong>
+                      </a>
+                    </div>
+                  </div>
+              </div>
+      
+          </nav>
+        </div>
+    </div>
+
+
+    <div class='hero-body' id='hero-telo'>
+
+        <!-- POCETNI PRIKAZ -->
+        <div class='container has-text-centered' id='div-0'>
+            <p class="title">
+                Dobrodošli,
+              </p>
+              <p class="subtitle">
+                Vi ste organizator olimpijade.
+            </p>
+        </div>
+
+        <!-- UNOS SPORTA -->
+        <div class="container is-hidden" id='div-1'>
+            <div class="columns">
+                <div class="column is-offset-4 is-4">  
+                    
+                    <form [formGroup]="form_unosSporta">
+                        <div class="field">
+                            <div class="control">
+                                <input type='text' class='input' formControlName='sport' placeholder="Naziv sporta">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select formControlName='vrsta'>
+                                        <option ngValue='Izaberite tip sporta'>Izaberite tip sporta</option>
+                                        <option ngValue='individ'>Individualni</option>
+                                        <option ngValue='ekipni'>Ekipni</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <input class='input' type='text' formControlName='br_igraca' placeholder='Broj igraca u formatu MIN/MAX'> 
+                            </div>
+                        </div>
+
+                        <button class='button' (click)='onClick_unesi_sport()'>Unesi</button>
+                    </form>
+                    
+                </div>
+            </div>
+        </div>
+
+        <!-- UNOS DISCIPLINE -->
+        <div class="container is-hidden" id='div-2'>
+            <div class="columns">
+                <div class="column is-4 is-offset-4">
+                    <form [formGroup]='form_unosSporta'>
+                        <div class="field">
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select formControlName='sport'>
+                                        <option ngValue='Izaberite sport' [defaultSelected]='true'>Izaberite sport</option>
+                                        <option *ngFor='let s of sportovi_no_duplicates' [ngValue]='s'>{{s}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <input type='text' class='input' formControlName='disciplina' placeholder="Naziv discipline">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select formControlName='vrsta'>
+                                        <option ngValue='Izaberite tip sporta'>Izaberite tip sporta</option>
+                                        <option ngValue='individ'>Individualni</option>
+                                        <option ngValue='ekipni'>Ekipni</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <button class='button' (click)='onClick_unesi_disc()'>Unesi</button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- UNOS TAKMICENJA -->
+        <div class="container is-hidden" id='div-3'>
+            <div class="columns">
+                <div class="column is-offset-4 is-4">
+                    <form [formGroup]='form_takmicenje'>
+                        <div class="field">
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select formControlName='sport' (click)='onChange_izaberite_sport()'>
+                                        <option ngValue='Izaberite sport' [defaultSelected]='true'>Izaberite sport</option>
+                                        <option *ngFor='let s of sportovi_no_duplicates' [ngValue]='s'>{{s}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                       <div class="field">
+                           <div class="control">
+                            <div class="select">
+                                <select  formControlName='disciplina' (change)='onChange_izaberi_disciplinu()'>
+                                     <option ngValue='Izaberite disciplinu'>Izaberite disciplinu</option>
+                                     <option *ngFor='let disc of moguce_discipline' [ngValue]='disc'>{{disc}}</option>
+                                 </select>
+                             </div>
+                           </div>
+                       </div>
+
+                       <div class="field">
+                           <div class="control">
+                                <input type='text' class='input' formControlName='datum_od' placeholder="Datum pocetka">
+                           </div>
+                       </div>
+                       <div class="field">
+                           <div class="control">
+                                <input type='text' class='input' formControlName='datum_do' placeholder="Datum kraja">
+                           </div>
+                       </div>
+                       <div class="field">
+                           <div class="control">
+                                <input type='text' class='input' formControlName='lokacija' placeholder="Lokacije (odvojene zarezom)">
+                           </div>
+                       </div>
+
+                       <div class="field">
+                           <div class="control">
+                               <textarea class='textarea' placeholder="Format takmicenja" formControlName='format'></textarea>
+                           </div>
+                       </div>
+
+                       <ng-container *ngIf="tip_sporta == 'individ'">
+                           <label class='label'>Izaberite ucesnike:</label>
+                           <div formArrayName='takmicari'>
+                               <div *ngFor='let cntrl of takmicari.controls; let i=index' [formGroupName]='i'>
+                                    <div class="field is-grouped">
+                                        <div class="control is-expanded">
+                                            <label class="checkbox">
+                                                <input type='checkbox' formControlName='checked' >
+                                                {{moguci_takmicari[i].ime}} {{moguci_takmicari[i].prezime}}
+                                            </label>
+                                        </div>
+                                        
+                                        <ng-container *ngIf="selected_sport == 'tenis'">
+                                            <div class="control">
+                                                <input formControlName='nosilac' type='number' class='input is-small' placeholder='Nosilac'>
+                                            </div>
+                                        </ng-container>
+                                        
+                                        
+                                    </div>
+                               </div>
+                           </div>
+                           <div class="field"></div>
+                       </ng-container>
+
+                       <ng-container *ngIf="tip_sporta == 'ekipni'">
+                            <label class='label'>Izaberite ekipe:</label>
+                            <div formArrayName='takmicari'>
+                                <div *ngFor='let cntrl of takmicari.controls; let i=index' [formGroupName]='i'>
+                                    <div class="field">
+                                        <div class="control">
+                                            <label class="checkbox">
+                                                <input type='checkbox' formControlName='checked' >
+                                                {{moguce_ekipe[i]}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="field"></div>
+                       </ng-container>
+
+
+                        <label class='label'>Izaberite delegata/e:</label>
+                        <div formArrayName='delegati'>
+                            <div *ngFor='let cntrl of delegati_FormArray.controls; let i=index' [formGroupName]='i'>
+                                <div class="field">
+                                    <div class="control">
+                                        <label class="checkbox">
+                                            <input type='checkbox' formControlName='checked' >
+                                            {{delegati[i].ime}} {{delegati[i].prezime}}
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div class="field"></div>
+
+                        <div class="field">
+                            <div class="control">
+                                <label class='label'>Konkurencija:</label>
+                                <div class="select">
+                                    <select formControlName='konkurencija'>
+                                        <option>Izaberite konkurenciju</option>
+                                        <option ngValue='muski'>Muškarci</option>
+                                        <option ngValue='zenski'>Žene</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <button type='submit' class='button' (click)='ngSubmit_unesi_takmicenje()'>Unesite takmičenje</button>
+                            </div>
+                        </div>
+
+                        
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- PREGLED OSTVARENIH REKORDA -->
+        <div class="container is-hidden" id='div-4'>
+                    <table class="table center is-hoverable is-bordered">
+                        <tr>
+                            <th>Mesto i godina olimpijade</th>
+                            <th>Sportska disciplina</th>
+                            <th>Takmicar</th>
+                            <th>Nacionalnost</th>
+                            <th>Rezultat</th>
+                        </tr>
+                        <tr *ngFor='let r of rekordi'>
+                            <td>{{r.mesto_godina}}</td>
+                            <td>{{r.sport}} - {{r.disciplina}}</td>
+                            <td>{{r.takmicar}}</td>
+                            <td>{{r.drzava}}</td>
+                            <td>{{r.rezultat}}</td>
+                        </tr>
+                    </table>
+
+
+        </div>
+
+        <!-- ODOBRI KORISNIKE -->
+        <div class='container is-hidden' id='div-5'>
+            <div class="columns">
+                <div class="column is-6 is-offset-3">
+                    <form [formGroup]='form_odobriKorisnika'>
+                        <label class='label'>Izaberite korisnike:</label>
+                                <div formArrayName='korisnici'>
+                                    <div *ngFor='let cntrl of korisnici_FormArray.controls; let i=index' [formGroupName]='i'>
+                                        <div class="field">
+                                            <div class="control">
+                                                <label class="checkbox">
+                                                    <input type='checkbox' formControlName='checked' >
+                                                    {{neodobreni_korisnici[i].ime}} {{neodobreni_korisnici[i].prezime}} - {{neodobreni_korisnici[i].korime}}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                        <div class="field"></div>
+
+                        <div class="field">
+                            <div class="control">
+                                <button class='button' type='button' (click)='odobriKorisnike()'>Odobri</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        
+        </div>
+
+    </div>
+
+    <div class='hero-foot' id='hero-futer'>
+        <nav class='tabs is-boxed is-fullwidth'>
+            <div class="container">
+                <ul>
+                    <li id='tab-1' (click)='show_content(1)'><a><strong>Unos sporta</strong></a></li>
+                    <li id='tab-2' (click)='show_content(2)'><a><strong>Unos discipline</strong></a></li>
+                    <li id='tab-3' (click)='show_content(3)'><a><strong>Unos takmicenja</strong></a></li>
+                    <li id='tab-4' (click)='show_content(4)'><a><strong>Pregled ostvarenih rekorda</strong></a></li>
+                    <li id='tab-5' (click)='show_content(5)'><a><strong>Odobri korisnike</strong></a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+</section>
+
+

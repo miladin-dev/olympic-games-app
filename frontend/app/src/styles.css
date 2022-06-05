@@ -1,0 +1,41 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+.is-mile-1
+{
+	background-color: #689775 !important
+}
+.is-mile-2
+{
+	background-color: #917164
+}
+.is-mile-3
+{
+	background-color: #C7493A
+}
+.is-mile-4
+{
+	background-color: #A33327
+}
+.is-mile-5
+{
+	background-color: #AD8174
+}
+
+.is-mile-6
+{
+	background-color: #1D2F35 !important;
+}
+
+.is-mile-7
+{
+	background-color: #202020 !important;
+}
+
+table.center {
+    margin-left:auto; 
+    margin-right:auto;
+}
+
+
+.is-borderless { border: 0}

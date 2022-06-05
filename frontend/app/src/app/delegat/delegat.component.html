@@ -1,0 +1,831 @@
+<section class='hero has-background-info-light is-fullheight'>
+    <div class='hero-head'>
+        <div class="container">
+          <nav class='navbar'>
+              <div class='navbar-brand'>
+                  <a class='navbar-item'>
+                      <img src='../../assets/oilogo2.png'>
+                  </a>
+              </div>
+      
+              <div class="navbar-end">
+                  <a class="navbar-item is-active" (click)='show_content(0)'>
+                    Početna stranica
+                  </a>
+                  <div class="navbar-item">
+                    <div class="buttons">
+                      <a class="button is-info" (click)='odjaviSe()'>
+                        <strong>Odjava</strong>
+                      </a>
+                    </div>
+                  </div>
+              </div>
+      
+          </nav>
+        </div>
+      </div>
+
+
+    <div class='hero-body' id='hero-telo'>
+
+        <!-- empty div  -->
+        <div class='container has-text-centered' id='div-0'>
+            <p class="title">
+                Dobrodošli {{ulogovan.ime}} {{ulogovan.prezime}}
+              </p>
+              <p class="subtitle">
+                Delegat
+            </p>
+        </div>
+
+        <div class='container is-hidden has-text-centered' id='div-1'>
+            <p class="title">
+                Trenutno uređujete individualna takmičenja.
+              </p>
+        </div>
+
+        <div class='container is-hidden has-text-centered' id='div-2'>
+            <p class="title">
+                Trenutno uređujete ekipna takmičenja.
+              </p>
+        </div>
+
+        
+
+        <!-- Ovo je div za unos rasporeda individualnog sporta - finalne faze  -->
+        <div class='container is-hidden' id='div-3'>
+            <div class="columns">
+                <div class="column is-4 is-offset-4">
+                    <form [formGroup]='form_individualniSport'>
+                        
+                        <div class="field">
+                            <div class="control">
+                                <div class="select">
+                                    <select formControlName='takmicenje'>
+                                        <option ngValue='Izaberite takmicenje'>Izaberite takmičenje</option>
+                                        <option *ngFor='let ct of content_indivdSportovi_unos_rasporeda' [ngValue]='ct.id'>{{ct.sport}} - {{ct.disciplina}} - {{ct.konk}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <input class='input' type='text' formControlName='lokacija' placeholder="Unesite lokaciju">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <input class='input' type='text' formControlName='datum' placeholder="Unesite datum finalne grupe">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <input class='input' type='text' formControlName='vreme' placeholder="Unesite satnicu">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="control">
+                                <button class="button is-mile-5" type='submit' (click)='ngSubmit_unesi_raspored_individ()'>Unesi</button>
+                            </div>
+                        </div>
+                        
+                        
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- Unos rezultata individualnih sportova -->
+        <div class='container is-hidden' id='div-4'>
+            <div class="columns ">
+                <div class="column is-offset-3 is-6 has-text-centered">
+                    <form [formGroup]='form_individualniSport'>
+                        
+                        <!-- Izbor takmicenja -->
+                        <div class="field">
+                            <div class="control">
+                                <div class="select">
+                                    <select formControlName='takmicenje' (change)='onChange_izaberi_individ_takmicenje()'>
+                                        <option ngValue='Izaberite takmicenje'>Izaberite takmičenje</option>
+                                        <option *ngFor='let cnt of select_content_IndSp_unos_rez'
+                                        [ngValue]='cnt.id'>{{cnt.sport}} - {{cnt.disciplina}} - {{cnt.konk}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="title is-uppercase">
+                            {{grupna_faza_individ}}
+                        </p>
+
+                        <!-- Unos rezultata za takmicare i lista takmicara -->
+                        <div formArrayName='takmicar_rezultat'>
+                            <div *ngFor='let controls of takmicar_rez_Forms.controls; let i=index' [formGroupName]='i'>
+                                <label class='label'>{{takmicariArr[i]}}</label>
+                                <div class="field has-addons has-addons-centered ">
+                                    <div class="control">
+                                        <input type='text' class='input' formControlName='rezultat'>
+                                    </div>
+                                    <div class="control">
+                                        <button class='button' type='button' (click)='onClick_unesi_rezultat_individ(i)'>Unesi</button>
+                                    </div>
+                                </div>
+                                <div class="field"></div>
+                            </div>
+                        </div>
+
+                        <div class='is-hidden' id='button-naredna-faza'>
+                        <!-- <ng-container *ngIf="grupna_faza_individ !='finale' && grupna_faza_individ != '6. serija'"> -->
+                            <div class="field">
+                                <div class="control">
+                                    <button class='button' type='button' (click)='onClick_naredna_faza_individ()'>Naredna faza</button>
+                                </div>
+                            </div>
+                        <!-- </ng-container> -->
+                        </div>
+
+                        <div class='is-hidden' id='button-kraj-takmicenja'>
+                        <!-- <ng-container *ngIf="grupna_faza_individ =='finale' || grupna_faza_individ == '6. serija'"> -->
+                            <div class="field">
+                                <div class="control">
+                                    <button class='button' type='button' (click)='onClick_kraj_takmicenja_individ()'>Kraj takmičenja</button>
+                                </div>
+                            </div>
+                        <!-- </ng-container> -->
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="container is-hidden" id="div-tenis-individ">
+            <div class="columns">
+                <div class="column is-8 is-offset-2">
+                    <nav class='panel'>
+                        <p class='panel-heading'>
+                            Rezultati
+                        </p>
+                        <div class='panel-tabs'>
+                            <a id='tab-8' [class.is-active]="grupna_faza_individ =='osmina finala'">Osmina finala</a>
+                            <a id='tab-4' [class.is-active]="grupna_faza_individ =='cetvrtina finala'">Cetvrtina finala</a>
+                            <a id='tab-2' [class.is-active]="grupna_faza_individ =='polufinale'">Polufinale</a>
+                            <a id='tab-1' [class.is-active]="grupna_faza_individ =='trece mesto'">Trece mesto</a>
+                            <a id='tab-1' [class.is-active]="grupna_faza_individ =='finale'">Finale</a>
+                        </div>
+                    </nav>
+
+                    <form [formGroup]='form_individualniSport'>
+
+                        <!-- OSMINA  -->
+                        <div *ngIf="grupna_faza_individ == 'osmina finala'">
+                            <div formArrayName='tenis_arr_osmina'>
+                                <ng-container *ngFor='let ctrl of curr_tenis_formArray?.controls; let i=index' [formGroupName]='i'>
+                                    <div class="columns">
+                                        <div class="column has-text-left is-4">
+                                            <div class="field">
+                                                <label class="label">{{curr_tenis_rez[i].tim1}}</label>
+                                                <div class="control">
+                                                    <input formControlName="setovi_takm1" class="input" type="text"> 
+                                                </div>
+                                            </div>
+                                        </div>
+        
+                                        <div class="column has-text-centered is-4">
+                                            <div class="field">
+                                                <button class="button" (click)="tenis_onClick_unesi_setove(i)">Potvrdi</button>
+                                            </div>
+                                        </div>
+        
+                                        <div class="column has-text-right is-4">
+                                            <div class="field">
+                                                <label class="label">{{curr_tenis_rez[i].tim2}}</label>
+                                                <div class="control">
+                                                    <input formControlName="setovi_takm2" class="input" type="text"> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <!-- CETVRTINA FINALA  -->
+                        <div *ngIf="grupna_faza_individ == 'cetvrtina finala'">
+                            <div formArrayName='tenis_arr_cetvrtina'>
+                                <ng-container *ngFor='let ctrl of curr_tenis_formArray?.controls; let i=index' [formGroupName]='i'>
+                                    <div class="columns">
+                                        <div class="column has-text-left is-4">
+                                            <div class="field">
+                                                <label class="label">{{curr_tenis_rez[i].tim1}}</label>
+                                                <div class="control">
+                                                    <input formControlName="setovi_takm1" class="input" type="text"> 
+                                                </div>
+                                            </div>
+                                        </div>
+        
+                                        <div class="column has-text-centered is-4">
+                                            <div class="field">
+                                                <button class="button" (click)="tenis_onClick_unesi_setove(i)">Potvrdi</button>
+                                            </div>
+                                        </div>
+        
+                                        <div class="column has-text-right is-4">
+                                            <div class="field">
+                                                <label class="label">{{curr_tenis_rez[i].tim2}}</label>
+                                                <div class="control">
+                                                    <input formControlName="setovi_takm2" class="input" type="text"> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <!-- POLUFINALE -->
+                        <div *ngIf="grupna_faza_individ == 'polufinale'">
+                            <div formArrayName='tenis_arr_poluf'>
+                                <ng-container *ngFor='let ctrl of curr_tenis_formArray?.controls; let i=index' [formGroupName]='i'>
+                                    <div class="columns">
+                                        <div class="column has-text-left is-4">
+                                            <div class="field">
+                                                <label class="label">{{curr_tenis_rez[i].tim1}}</label>
+                                                <div class="control">
+                                                    <input formControlName="setovi_takm1" class="input" type="text"> 
+                                                </div>
+                                            </div>
+                                        </div>
+        
+                                        <div class="column has-text-centered is-4">
+                                            <div class="field">
+                                                <button class="button" (click)="tenis_onClick_unesi_setove(i)">Potvrdi</button>
+                                            </div>
+                                        </div>
+        
+                                        <div class="column has-text-right is-4">
+                                            <div class="field">
+                                                <label class="label">{{curr_tenis_rez[i].tim2}}</label>
+                                                <div class="control">
+                                                    <input formControlName="setovi_takm2" class="input" type="text"> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <!-- TRECE MESTO  -->
+                        <div *ngIf="grupna_faza_individ == 'trece mesto'">
+                            <div formArrayName='trece_m'>
+                                <ng-container *ngFor='let ctrl of curr_tenis_formArray?.controls; let i=index' [formGroupName]='i'>
+                                    <div class="columns">
+                                        <div class="column has-text-left is-4">
+                                            <div class="field">
+                                                <label class="label">{{curr_tenis_rez[i].tim1}}</label>
+                                                <div class="control">
+                                                    <input formControlName="setovi_takm1" class="input" type="text"> 
+                                                </div>
+                                            </div>
+                                        </div>
+        
+                                        <div class="column has-text-centered is-4">
+                                            <div class="field">
+                                                <button class="button" (click)="tenis_onClick_unesi_setove(i)">Potvrdi</button>
+                                            </div>
+                                        </div>
+        
+                                        <div class="column has-text-right is-4">
+                                            <div class="field">
+                                                <label class="label">{{curr_tenis_rez[i].tim2}}</label>
+                                                <div class="control">
+                                                    <input formControlName="setovi_takm2" class="input" type="text"> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                        <!-- FINALE -->
+                        <div *ngIf="grupna_faza_individ == 'finale'">
+                            <div formArrayName='tenis_arr_finale'>
+                                <ng-container *ngFor='let ctrl of curr_tenis_formArray?.controls; let i=index' [formGroupName]='i'>
+                                    <div class="columns">
+                                        <div class="column has-text-left is-4">
+                                            <div class="field">
+                                                <label class="label">{{curr_tenis_rez[i].tim1}}</label>
+                                                <div class="control">
+                                                    <input formControlName="setovi_takm1" class="input" type="text"> 
+                                                </div>
+                                            </div>
+                                        </div>
+        
+                                        <div class="column has-text-centered is-4">
+                                            <div class="field">
+                                                <button class="button" (click)="tenis_onClick_unesi_setove(i)">Potvrdi</button>
+                                            </div>
+                                        </div>
+        
+                                        <div class="column has-text-right is-4">
+                                            <div class="field">
+                                                <label class="label">{{curr_tenis_rez[i].tim2}}</label>
+                                                <div class="control">
+                                                    <input formControlName="setovi_takm2" class="input" type="text"> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- EKIPNA TAKMICENJA -->
+        <div class='container is-hidden' id='div-5'>
+            <div class="columns">
+                <div class="column is-offset-3 is-6">
+
+                    <form [formGroup]='form_ekipniSport'>
+                        <div class="field">
+                            <div class="control">
+                                <div class="select">
+                                    <select formControlName='takmicenje' (change)="onChange_izbor_takmicenja_ekipni()">
+                                        <option ngValue='Izaberite takmicenje'>Izaberite takmičenje</option>
+                                        <option *ngFor='let cnt of content_ekipniSportovi' [ngValue]='cnt.id'>{{cnt.sport}} - {{cnt.disciplina}} - {{cnt.konk}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+
+                         <div class="field">
+                             <button type="button" class="button is-hidden" (click)="onClick_unesite_raspored_ekipni()" id="button-unesite-raspored">Formiraj raspored utakmica unutura kola</button>
+                         </div>
+         
+                         <div class="field">
+                             <div class="control">
+                                 <div class="select">
+                                     <select formControlName='utakmica' [compareWith]='compareFn'>
+                                         <option ngValue='Odaberite utakmicu'>Odaberite utakmicu</option>
+                                         <option [ngValue]='ek' *ngFor='let ek of ekipne_utakmice'>{{ek}}</option> 
+                                     </select>
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="field">
+                             <div class="control">
+                                 <input formControlName="lokacija" type="text " class="input" placeholder="Lokacija odrzavanja">
+                             </div>
+                         </div>
+                         <div class="field">
+                             <div class="control">
+                                 <input formControlName="datum" type="text" class="input" placeholder="Datum odrzavanja">
+                             </div>
+                         </div>
+                         <div class="field">
+                             <div class="control">
+                                 <input formControlName="vreme" type="text" class="input" placeholder="Vreme odrzavanja">
+                             </div>
+                         </div>
+                         <div class="field">
+                             <div class="control ">
+                                 <button class="button is-rounded" type="button" (click)="onClick_unesi_satnicu_ekipni()">Unesi</button>
+                             </div>
+                         </div>
+         
+         
+                    </form>
+                </div>
+            </div>
+        </div>           
+
+             
+        <!-- UNOS REZULTATA EKIPNI -->
+        <div class="container is-hidden" id='div-6'>
+            <div class="columns">
+                <div class="column is-8 is-offset-2">
+                    <nav class="panel">
+                        <p class="panel-heading">
+                            Rezultati
+                        </p>
+
+                        <p id='panel-header' class="panel-tabs">
+                            <a (click)='edit_panel_header(1)' id='a-kolo-1' [class.is-active]="curr_kolo == 1">1. kolo</a>
+                            <a (click)='edit_panel_header(2)' id='a-kolo-2' [class.is-active]="curr_kolo == 2">2. kolo</a>
+                            <a (click)='edit_panel_header(3)' id='a-kolo-3' [class.is-active]="curr_kolo == 3">3. kolo</a>
+                            <a (click)='edit_panel_header(4)' id='a-kolo-4' [class.is-active]="curr_kolo == 4">4. kolo</a>
+                            <a (click)='edit_panel_header(5)' id='a-kolo-5' [class.is-active]="curr_kolo == 5">5. kolo</a>
+                            <a (click)='edit_panel_header(6)' id='a-cetvf' [class.is-active]="curr_kolo == 6">Cetvrtina finala</a>
+                            <a (click)='edit_panel_header(7)' id='a-poluf' [class.is-active]="curr_kolo == 7">Polufinale</a>
+                            <a (click)='edit_panel_header(9)' id='a-trece-mesto' [class.is-active]="curr_kolo == 8">Trece mesto</a>
+                            <a (click)='edit_panel_header(8)' id='a-finale' [class.is-active]="curr_kolo == 8">Finale</a>
+                        </p>
+                        <div class="panel-block">
+                        <div class="control has-text-centered">
+                            <button class='button is-fullwidth' (click)='onClick_oznaci_kraj_kola()'>Označite kraj kola</button>
+                        </div>
+                        </div>
+
+
+                        <form [formGroup]='form_ekipniSport'>
+                        <div id="tab-selector">
+
+                            <!-- 1. KOLO -->
+                            <ng-container *ngIf="curr_kolo == 1">
+                            <div id='div-1-kolo' class='tab-selector is-active' formArrayName='kolo_1'>
+                                <ng-container *ngFor='let f of kolo_1Forms.controls; let i=index' [formGroupName]='i'>
+                                    
+                                    <div class="panel-block">
+        
+                                            <div class="column has-text-left is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_kolo1[i].tim1}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim1" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+                                            <div class="column has-text-centered is-4">
+                                                <div class="field">
+                                                    <button class="button" (click)="onClick_unos_poena(i)">Potvrdi</button>
+                                                </div>
+                                            </div>
+        
+                                            <div class="column has-text-right is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_kolo1[i].tim2}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim2" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+                                    </div>
+                                    
+                                </ng-container>
+                            </div>
+                            </ng-container>     
+
+
+                            <!-- 2. KOLO -->
+                            <div id='div-2-kolo' class='tab-selector is-hidden' formArrayName='kolo_2'>
+                                <ng-container *ngFor='let f of kolo_2Forms.controls; let i=index' [formGroupName]='i'>
+                                <ng-container *ngIf="ekipniRez_kolo2[i].vreme !='-'  && ekipniRez_kolo2[i].br_p1 === -1 && curr_kolo === 2">   
+                                        <div class="panel-block">
+            
+                                            <div class="column has-text-left is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_kolo2[i].tim1}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim1" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-centered is-4">
+                                                <div class="field">
+                                                    <button class="button" (click)="onClick_unos_poena(i)">Potvrdi</button>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-right is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_kolo2[i].tim2}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim2" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                </ng-container>
+                                </ng-container>
+                            </div>
+
+                                <!-- 3. KOLO -->
+                                <div id='div-3-kolo' class='tab-selector is-hidden' formArrayName='kolo_3'>
+                                    <ng-container *ngFor='let f of kolo_3Forms.controls; let i=index' [formGroupName]='i'>
+                                    <ng-container *ngIf="ekipniRez_kolo3[i].vreme !='-'  && ekipniRez_kolo3[i].br_p1 === -1 && curr_kolo === 3">   
+                                        <div class="panel-block">
+                
+                                            <div class="column has-text-left is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_kolo3[i].tim1}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim1" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-centered is-4">
+                                                <div class="field">
+                                                    <button class="button" (click)="onClick_unos_poena(i)">Potvrdi</button>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-right is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_kolo3[i].tim2}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim2" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+                                        </div>
+                                    </ng-container>
+                                    </ng-container>
+                                </div>
+
+                                <!-- 4. KOLO -->
+                                <div id='div-4-kolo' class='tab-selector is-hidden' formArrayName='kolo_4'>
+                                    <ng-container *ngFor='let f of kolo_4Forms.controls; let i=index' [formGroupName]='i'>
+                                    <ng-container *ngIf="ekipniRez_kolo4[i].vreme !='-'  && ekipniRez_kolo4[i].br_p1 === -1 && curr_kolo === 4">   
+                                        <div class="panel-block">
+                
+                                            <div class="column has-text-left is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_kolo4[i].tim1}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim1" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-centered is-4">
+                                                <div class="field">
+                                                    <button class="button" (click)="onClick_unos_poena(i)">Potvrdi</button>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-right is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_kolo4[i].tim2}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim2" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+                                        </div>
+                                    </ng-container>
+                                    </ng-container>
+                                </div>
+
+                                <!-- 5. kolo -->
+                                <div id='div-5-kolo' class='tab-selector is-hidden' formArrayName='kolo_5'>
+                                    <ng-container *ngFor='let f of kolo_5Forms.controls; let i=index' [formGroupName]='i'>
+                                    <ng-container *ngIf="ekipniRez_kolo5[i].vreme !='-'  && ekipniRez_kolo5[i].br_p1 === -1 && curr_kolo === 5">   
+                                        <div class="panel-block">
+                
+                                            <div class="column has-text-left is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_kolo5[i].tim1}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim1" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-centered is-4">
+                                                <div class="field">
+                                                    <button class="button" (click)="onClick_unos_poena(i)">Potvrdi</button>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-right is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_kolo5[i].tim2}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim2" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+                                        </div>
+                                    </ng-container>
+                                    </ng-container>
+                                </div>
+
+                                <!-- CETVRTINA FINALA - EKIPNI -->
+                                <div id='div-cetvf' class='tab-selector is-hidden' formArrayName='cetvrtinaf'>
+                                    <ng-container *ngFor='let f of kolo_CetvfForms.controls; let i=index' [formGroupName]='i'>
+                                    <ng-container *ngIf="ekipniRez_cetvrtina[i].br_p1 === -1 && curr_kolo === 6">   
+                                        <div class="panel-block">
+                
+                                            <div class="column has-text-left is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_cetvrtina[i].tim1}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim1" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-centered is-4">
+                                                <div class="field">
+                                                    <button class="button" (click)="onClick_unos_poena(i)">Potvrdi</button>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-right is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_cetvrtina[i].tim2}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim2" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+                                        </div>
+                                    </ng-container>
+                                    </ng-container>
+                                </div>
+
+                                <!-- POLUFINALE EKIPNI -->
+                                <div id='div-poluf' class='tab-selector is-hidden' formArrayName='poluf'>
+                                    <ng-container *ngFor='let f of kolo_PolufForms.controls; let i=index' [formGroupName]='i'>
+                                    <ng-container *ngIf="ekipniRez_poluf[i].br_p1 === -1 && curr_kolo === 7">   
+                                        <div class="panel-block">
+                
+                                            <div class="column has-text-left is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_poluf[i].tim1}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim1" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-centered is-4">
+                                                <div class="field">
+                                                    <button class="button" (click)="onClick_unos_poena(i)">Potvrdi</button>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-right is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_poluf[i].tim2}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim2" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+                                        </div>
+                                    </ng-container>
+                                    </ng-container>
+                                </div>
+
+
+                                <!-- FINALE EKIPNI -->
+                                <div id='div-finale' class='tab-selector is-hidden' formArrayName='finale'>
+                                    <ng-container *ngFor='let f of kolo_FinForms.controls; let i=index' [formGroupName]='i'>
+                                    <ng-container *ngIf="ekipniRez_finale[i].br_p1 === -1 && curr_kolo === 8">   
+                                        <div class="panel-block">
+                
+                                            <div class="column has-text-left is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_finale[i].tim1}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim1" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-centered is-4">
+                                                <div class="field">
+                                                    <button class="button" (click)="onClick_unos_poena(i)">Potvrdi</button>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-right is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_finale[i].tim2}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim2" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+                                        </div>
+                                    </ng-container>
+                                    </ng-container>
+                                </div>
+
+
+                                <!-- TRECE MESTO EKIPNI -->
+                                <div id='div-trece-mesto' class='tab-selector is-hidden' formArrayName='trece_mesto'>
+                                    <ng-container *ngFor='let f of kolo_FinForms.controls; let i=index' [formGroupName]='i'>
+                                    <ng-container *ngIf="ekipniRez_trecem[i].br_p1 === -1 && curr_kolo === 8">   
+                                        <div class="panel-block">
+                
+                                            <div class="column has-text-left is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_trecem[i].tim1}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim1" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-centered is-4">
+                                                <div class="field">
+                                                    <button class="button" (click)="onClick_unos_poena_trecem(i)">Potvrdi</button>
+                                                </div>
+                                            </div>
+                
+                                            <div class="column has-text-right is-4">
+                                                <div class="field">
+                                                    <label class="label">{{ekipniRez_trecem[i].tim2}}</label>
+                                                    <div class="control">
+                                                        <input formControlName="tim2" class="input" type="text"> 
+                                                    </div>
+                                                </div>
+                                            </div>
+        
+                                        </div>
+                                    </ng-container>
+                                    </ng-container>
+                                </div>
+
+
+
+                            </div>
+                        
+                        </form>
+                        
+                    </nav>
+                </div>
+            </div>
+            <div class="columns">
+                <div class="column is-8 is-offset-2">
+                    <button class='button is-fullwidth' [disabled]='kraj_ekipnog_takmicenja' (click)='onClick_kraj_takmicenja()'>Kraj takmicenja</button>
+                </div>
+            </div>
+        </div>
+
+        
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- hero - footer -->
+
+    <div class="hero-foot" id='hero-futer'>
+        <nav class="tabs is-boxed is-fullwidth">
+            <div class='container'>
+                <ul>
+                    <li (click)='show_content(1)' id='li-1'><a><strong>Individualni sportovi</strong></a></li>
+                    <li (click)='show_content(2)' id='li-2'><a><strong>Ekipni sportovi</strong></a></li>
+                    <li class='is-hidden' (click)='show_content(0)' id='li-0'><a><strong>Nazad</strong></a></li>
+                    <li class='is-hidden' (click)='show_content(3)' id='li-3'><a><strong>Unos rasporeda finalne runde</strong></a></li>
+                    <li class='is-hidden' (click)='show_content(4)' id='li-4'><a><strong>Unos rezultata</strong></a></li>
+                    <li class='is-hidden' (click)='show_content(5)' id='li-5'><a><strong>Unos rasporeda</strong></a></li>
+                    <li class='is-hidden' (click)='show_content(6)' id='li-6'><a><strong>Unos rezultata</strong></a></li>
+                </ul>
+            </div>  
+        </nav>
+    </div>
+
+</section>
+

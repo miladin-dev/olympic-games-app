@@ -1,0 +1,480 @@
+
+<section class="hero has-background-info-light is-fullheight">
+  <!-- Hero head: will stick at the top -->
+  <div class='hero-head'>
+    <div class="container has-text-white">
+      <nav class='navbar'>
+          <div class='navbar-brand'>
+              <a class='navbar-item'>
+                  <img src='../../assets/oilogo2.png'>
+              </a>
+          </div>
+  
+          <div class="navbar-end">
+              <a class="navbar-item" (click)='show_content(0)'>
+                Početna stranica
+              </a>
+
+              <a class="navbar-item" (click)='show_content(-1)' id='button-1'>
+                <strong>Registracija</strong>
+              </a>
+
+              <a class="navbar-item" (click)='show_content(-2)' id='button-2'>
+                <strong>Prijava</strong>
+              </a>
+              <a class="navbar-item" (click)='show_content(-3)' id='button-3'>
+                <strong>Promena lozinke</strong>
+              </a>
+
+                  
+
+
+          </div>
+  
+      </nav>
+    </div>
+  </div>
+
+  <!-- Hero content: will be in the middle -->
+  <div class="hero-body" id='hero-telo'>
+
+    <div class='container is-hidden' id='div-promena-lozinke'>
+      <div class="columns">
+        <div class="column is-offset-3 is-6">
+          <form [formGroup]='form_promena_loz'>
+
+            <div class="field">
+              <div class="control">
+                <input class='input' type='text' placeholder="Korisničko ime" formControlName='korime'>
+              </div>
+            </div>
+
+            <div class="field">
+              <div class="control">
+                  <input class='input' type='password' placeholder="Stara lozinka" formControlName='stara_loz'>
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                  <input class='input' type='password' placeholder="Nova lozinka" formControlName='lozinka'>
+              </div>
+
+              <div *ngIf="nova_loz.invalid && (nova_loz.dirty || nova_loz.touched)" class="control has-background-danger-dark">
+                <div *ngIf="nova_loz.errors?.pattern" class='px-2'>
+                  <strong>Lozinka nije u ispravnom formatu.</strong>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="field">
+                <div class="control">
+                    <input class='input' type='password' placeholder="Potvrda lozinke" formControlName='potvrda_loz'>
+                </div>
+
+                <div class="control has-background-danger-dark">
+                  <div *ngIf="potvrda_nove.invalid && (potvrda_nove.touched || potvrda_nove.dirty)">
+                    <div *ngIf="form_promena_loz.hasError('mismatchedPasswords')" class='px-2'>
+                      <strong>Lozinke se ne poklapaju.</strong>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="field">
+              <div class="control">
+                  <button class="button" type='submit' (click)='ngPromenaLozinke()'>Promeni</button>
+              </div>
+          </div>
+
+          <div *ngIf='err_msg_promena_loz' class="field">
+              <div class="control has-text-danger-dark">
+                 <strong>{{err_msg_promena_loz}}</strong>
+              </div>
+          </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container is-hidden" id='div-registracija'>
+    <div class="columns">
+        <div class="column is-offset-3 is-6">
+            <form [formGroup]='form_registracija'>
+                <div class="field">
+                    <div class="control">
+                        <input class='input' type='text' placeholder="Korisničko ime" formControlName='korime'>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <input class='input' type='password' placeholder="Lozinka" formControlName='lozinka'>
+                    </div>
+
+                    <div *ngIf="lozinka_reg.invalid && (lozinka_reg.dirty || lozinka_reg.touched)" class="control has-background-danger-dark">
+                      <div *ngIf="lozinka_reg.errors?.pattern" class='px-2'>
+                        <strong>Lozinka nije u ispravnom formatu.</strong>
+                      </div>
+                    </div>
+                    
+
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <input class='input' type='password' placeholder="Potvrda lozinke" formControlName='potvrda_loz'>
+                    </div>
+
+                    <div class="control control has-background-danger-dark">
+                      <div *ngIf="potvrda_loz.invalid && (potvrda_loz.touched || potvrda_loz.dirty)">
+                        <div *ngIf="form_registracija.hasError('mismatchedPasswords')" class='px-2'>
+                          <strong>Lozinke se ne poklapaju.</strong>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <input class='input' type='text' placeholder="Ime" formControlName='ime'>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <input class='input' type='text' placeholder="Prezime" formControlName='prezime'>
+                    </div>
+                </div>
+
+                <div class="field">
+                  <div class="control">
+                      <div class="select is-fullwidth">
+                          <select formControlName='zemlja'>
+                              <option>Izaberite nacionalnost</option>
+                              <option>Srbija</option>
+                              <option value='Nemacka'>Nemačka</option>
+                              <option>Engleska</option>
+                              <option>SAD</option>
+                              <option>Slovenija</option>
+                              <option value='Spanija'>Španija</option>
+                              <option value='Grcka'>Grčka</option>
+                              <option>Argentina</option>
+                              <option>Francuska</option>
+                              <option>Italija</option>
+                              <option value='Svajcarska'>Švajcarska</option>
+                              <option>Litvanija</option>
+                              <option>Rusija</option>
+                              <option>Austrija</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+
+                <div class="field">
+                    <div class="control">
+                        <input class='input' type='text' placeholder="Adresa elektronske pošte" formControlName='mail'>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select formControlName='tip'>
+                                <option>Tip korisnika</option>
+                                <option ngValue='vodja'>Vođa nacionalne delegacije</option>
+                                <option ngValue='delegat'>Delegat</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <button class="button" type='submit' (click)='ngRegister()'>Registracija</button>
+                    </div>
+                </div>
+
+                <div *ngIf='err_msg' class="field">
+                    <div class="control">
+                        {{err_msg}}
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+    </div>
+
+    <div class="container is-hidden" id='div-prijava'>
+        <div class="columns">
+            <div class="column is-8 is-offset-2">
+            <form [formGroup]='form_login'>
+                
+                <div class="field">
+                    <div class="control">
+                        <input class='input' type='text' placeholder="Korisničko ime" formControlName='korime'/>
+                        
+                        <div class='control has-background-danger-dark'>
+                          <div *ngIf="korime_FormLogin.invalid && (korime_FormLogin.touched || korime_FormLogin.dirty)" >
+                            <div *ngIf="korime_FormLogin.errors?.required">
+                              <strong>Korisničko ime je obavezno.</strong>
+                            </div>
+                          </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <input class='input' type='password' placeholder="Lozinka" formControlName='lozinka'>
+                    </div>
+                    
+                    <div class='control has-background-danger-dark' *ngIf='lozinka_login.invalid && (lozinka_login.touched || lozinka_login.dirty)'>
+                      <div *ngIf='lozinka_login.errors?.pattern' class='px-2'>
+                        <strong>Lozinka nije u ispravnom formatu.</strong>
+                      </div>
+                    </div>
+                    
+                    
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <div class="select is-fullwidth">
+                            <select formControlName='tip'>
+                                <option>Tip korisnika</option>
+                                <option ngValue='vodja'>Vođa nacionalne delegacije</option>
+                                <option ngValue='delegat'>Delegat</option>
+                                <option ngValue='organizator'>Organizator</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <button class="button" type='submit' (click)='ngLogin()'>Prijava</button>
+                    </div>
+                </div>
+
+                <div *ngIf='err_msg_login' class="field">
+                  <div class="control has-text-danger-dark">
+                      <strong>{{err_msg_login}}</strong>
+                  </div>
+                </div>
+
+
+            </form>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="container has-text-centered" id='div-0'>
+     
+          <img src='../../assets/tokyologo.png' width='200' height='300'>
+     
+    </div>
+
+    <div class="container is-hidden" id='div-1'>
+       <div class="columns">
+         <div class="column is-offset-3 is-6">
+            <table class='table center is-hoverable is-bordered is-fullwidth'>
+              <thead>
+                <th>Zastava zemlje</th>
+                <th>Naziv zemlje</th>
+                <th>Broj učesnika zemlje</th>
+              </thead>
+              <tbody>
+                <tr *ngFor='let cnt of table_content_1'>
+                  <td><img src='{{cnt.slika}}'></td>
+                  <td>{{cnt.zemlja}}</td>
+                  <td>{{cnt.broj}}</td>
+                </tr>
+              </tbody>
+            </table>
+         </div>
+      </div>
+    </div>
+
+    <div class="container is-hidden" id='div-2'>
+       <div class="columns">
+         <div class="column is-offset-3 is-6">
+            <table class='table center is-hoverable is-bordered is-fullwidth'>
+              <thead>
+                <th>Rang</th>
+                <th>Naziv zemlje</th>
+                <th>Broj zlatnih medalja</th>
+                <th>Broj srebrnih medalja</th>
+                <th>Broj bronzanih medalja</th>
+                <th>Ukupan broj medalja</th>
+              </thead>
+              <tbody>
+                <tr *ngFor='let pr of pregled_osvojenih_medalja'>
+                  <td>{{pr.rang}}</td>
+                  <td>{{pr.zemlja}}</td>
+                  <td>{{pr.br_zlatnih}}</td>
+                  <td>{{pr.br_srebrnih}}</td>
+                  <td>{{pr.br_bronzanih}}</td>
+                  <td>{{pr.ukupan_br}}</td>
+                </tr>
+              </tbody>
+            </table>
+         </div>
+      </div>
+    </div>
+
+    <div class="container is-hidden" id='div-3'>
+      <div class="columns">
+        <div class="column is-offset-3 is-6">
+           
+          <div id='div-pretraga'>
+            <form [formGroup]='form_pretragaTakmicara'>
+
+              <div class="field">
+                <div class="control">
+                <input formControlName='ime_prezime' type='text' class='input' placeholder="Ime i prezime">
+                </div>
+              </div>
+            
+              <div class="field">
+                  <div class="control">
+                  <div class="select is-fullwidth">
+                    <select formControlName='zemlja'>
+                      <option>Sve zemlje</option>
+                      <option *ngFor='let z of sve_zemlje'>{{z}}</option>
+                    </select>
+                  </div>
+                  </div>
+              </div>
+
+              <div class="field">
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select formControlName='sport' (change)='onChange_izaberi_sport()'>
+                      <option>Svi sportovi</option>
+                      <option *ngFor='let s of svi_sportovi_noDuplicates'>{{s}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="control">
+                  <div class="select is-fullwidth">
+                    <select formControlName='disciplina'>
+                      <option>Sve discipline</option>
+                      <option *ngFor='let d of moguce_disc'>{{d}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="field">
+                <div class="control">
+                  <strong>Pol:  </strong>
+                  <label class="radio">
+                    <input type="radio" value='muski' name="pol" formControlName='pol'>
+                    M
+                  </label>
+                  <label class="radio">
+                    <input type="radio" value='zenski' name="pol" formControlName='pol'>
+                    Ž
+                  </label>
+                </div>
+              </div>
+
+              <div class="field">
+                <div class="control">
+                  <label class="checkbox" >
+                    <input type="checkbox" formControlName='samo_osvajaci_medalja'>
+                    Samo osvajači medalja
+                  </label>
+                </div>
+              </div>
+
+
+              <div class="field">
+                <div class="control">
+                  <button class='button' type='submit' (click)='onClick_pretrazi()'>Pretraži</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class='is-hidden' id='div-lista-takmicara'>
+            <div class="field">
+              <div class="control">
+                <button class="button" type='button' (click)='result_per_page(10)'>10 po stranici</button>
+                <button class="button" type='button' (click)='result_per_page(20)'>20 po stranici</button>
+                <button class="button" type='button' (click)='result_per_page(100)'>100 po stranici</button>
+              </div>
+            </div>
+            <table class='table center is-fullwidth is-hoverable is-bordered'>
+              <tbody>
+                <tr *ngFor='let tak of paginatedItems'>
+                  <td>{{tak.ime}} {{tak.prezime}}</td>
+                  <td>{{tak.drzava}}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <nav class='pagination' role='navigation'>
+              <ul class='pagination-list'>
+                <li  *ngFor='let c of pagArr; let i=index;' (click)='paginate(i)'>
+                  <a [id]="'li-' + c" class='pagination-link'>{{c}}</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container is-hidden" id='div-4'>
+      <div class="columns has-text-centered">
+        <div class="column">
+          <canvas *ngIf='show_chart' baseChart
+            [datasets]="barChartData"
+            [labels]="chart_x_osa"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+            [chartType]="barChartBar"
+            ></canvas>
+        </div>
+        <div class="column">
+          <canvas *ngIf='show_chart' baseChart
+            [datasets]="lineChartData"
+            [labels]="chart_zemlje"
+            [options]="barChartOptions"
+            [legend]="barChartLegend"
+            [chartType]="barChartLine"
+            ></canvas>
+        </div>
+      </div>
+    </div>
+     
+
+
+  </div>
+
+  <div class="hero-foot" id='hero-futer'>
+      <nav class="tabs is-boxed is-fullwidth ">
+          <div class="container">
+              <ul>
+                  <li id='a-1' (click)='show_content(1)' ><a><strong>Pregled zemalja učesnica</strong></a></li>
+                  <li id='a-2'><a (click)='show_content(2)'><strong>Pregled osvojenih medalja</strong></a></li>
+                  <li id='a-3'><a (click)='show_content(3)'><strong>Pretraga takmičara</strong></a></li>
+                  <li id='a-4'><a (click)='show_content(4)'><strong>Grafički prikaz</strong></a></li>
+              </ul>
+          </div>
+      </nav>
+  </div>
+
+</section>
+
